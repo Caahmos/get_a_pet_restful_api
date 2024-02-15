@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const createUserToken = require('../helpers/create-user-tokens');
 
 module.exports = class UserController{
     static async registrar(req, res){
@@ -19,8 +20,32 @@ module.exports = class UserController{
         const salt = bcrypt.genSaltSync(10);
         const senhaHash = bcrypt.hashSync(password, salt);
 
-        await User.create({ name, email, phone, password: senhaHash });
+        const usuario = new User({ name, email, phone, password: senhaHash });
         
-        res.status(201).json({ message: 'Registro adicionado com sucesso!'})
+        try{
+            const newUser = await usuario.save();
+            
+            await createUserToken(newUser, req, res);
+        }catch(err){
+            res.status(422).json({ message: 'Erro ao adicionar o registro!'});
+
+        }
     };
+
+    static async login(req, res){
+        const { email, password } = req.body;
+        
+        if(!email) return res.status(422).json({ message: 'O campo email é obrigatório!'});
+        if(!password) return res.status(422).json({ message: 'O campo senha é obrigatório!'});
+
+        const user = await User.findOne({ email });
+        if(!user) return res.status(422).json({ message: 'Não existe um usuário cadastrado com esse e-mail!'});
+        
+        const validarSenha = bcrypt.compareSync(password, user.password);
+
+        if(!validarSenha) return res.status(422).json({ message: 'Usuário e/ou senha inválidos!'});
+
+        await createUserToken(user, req, res);
+    }
+
 };

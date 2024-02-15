@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     },
     img: {
         type: String,
-        required: true
+        required: false
     },
     phone: {
         type: String,
@@ -24,3 +24,5 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const UserModel = mongoose.model('User', userSchema);
+
+module.exports = UserModel;

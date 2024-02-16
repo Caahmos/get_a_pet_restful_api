@@ -71,4 +71,14 @@ module.exports = class UserController{
         res.status(200).send(currentUser);
 
     }
+
+    static async findUserbyId(req, res){
+        const user = await User.findById(req.params.id);
+
+        if(!user) return res.status(422).json({ message: 'Usuário não encontrado!'});
+
+        user.password = undefined;
+
+        res.status(200).json({user});
+    }
 };

@@ -90,6 +90,14 @@ module.exports = class UserController {
             const token = getToken(req);
             const user = await getUserbyToken(token);
 
+            let image = '';
+
+            if(req.file){
+                image = req.file.filename;
+            };
+
+            user.img = image;
+
             if (!user) return res.status(401).json({ message: 'Usuário não encontrado!' });
 
             if (!name) return res.status(422).json({ message: 'O campo nome é obrigatório!' });
@@ -100,18 +108,27 @@ module.exports = class UserController {
 
             const emailExists = await User.findOne({ email: email });
 
-            if(email !== emailExists && emailExists) return res.status(422).json({ message: 'Esse endereço de email já está em uso!' });
+            if (email !== emailExists && emailExists) return res.status(422).json({ message: 'Esse endereço de email já está em uso!' });
 
             user.email = email;
 
             if (!phone) return res.status(422).json({ message: 'O campo telefone é obrigatório!' });
-            if (!password) return res.status(422).json({ message: 'O campo senha é obrigatório!' });
-            if (!confirmPassword) return res.status(422).json({ message: 'O campo confirmar a senha é obrigatório!' });
+
+            user.phone = phone;
+
             if (password != confirmPassword) return res.status(422).json({ message: 'As senhas devem ser iguais!' });
+            else if (password == confirmPassword && password != '') {
+
+                const salt = bcrypt.genSaltSync(10);
+                const senhaHash = bcrypt.hashSync(password, salt);
+
+                user.password = senhaHash;
+
+            }
 
             console.log('---------------------------------- ' + user._id);
 
-            await User.findByIdAndUpdate(user.id, { name, email, phone, password })
+            await User.findByIdAndUpdate(user.id, user);
 
             return res.status(200).json({ message: 'Deu certo a edição!' });
         } catch (err) {

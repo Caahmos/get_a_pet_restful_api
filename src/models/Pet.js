@@ -9,7 +9,7 @@ const petSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    weigth: {
+    weight: {
         type: Number,
         required: true
     },
@@ -19,7 +19,7 @@ const petSchema = new mongoose.Schema({
     },
     images: {
         type: Array,
-        required: true
+        required: false
     },
     avaiable: {
         type: Boolean

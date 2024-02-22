@@ -19,7 +19,7 @@ const petSchema = new mongoose.Schema({
     },
     images: {
         type: Array,
-        required: false
+        required: true
     },
     avaiable: {
         type: Boolean

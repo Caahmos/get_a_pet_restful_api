@@ -12,5 +12,7 @@ route.get('/myadoptions', verifyToken, PetsController.getAllUserAdoptions);
 route.get('/:id', PetsController.getPetbyId);
 route.delete('/:id', verifyToken, PetsController.removePetbyId);
 route.patch('/:id', verifyToken, imageUpload.array('images'), PetController.updatePet);
+route.patch('/schedule/:id', verifyToken, PetController.schedule);
+route.patch('/conclude/:id', verifyToken, PetController.concludeAdoption);
 
 module.exports = route;

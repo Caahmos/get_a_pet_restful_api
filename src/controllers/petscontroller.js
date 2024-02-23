@@ -161,5 +161,60 @@ module.exports = class PetController {
             console.log(err);
             res.status(422).json({ message: 'Pet não foi atualizado!' });
         };
-    }
+    };
+
+    static async schedule(req, res) {
+        try {
+            const idPet = req.params.id;
+            const token = getToken(req);
+            const user = await getUserbyToken(token);
+
+            const petAtual = await Pet.findById(idPet);
+
+            if (!petAtual) return res.status(404).json({ message: 'Pet não encontrado!' });
+
+            if (petAtual.user._id.toString() == user.id.toString()) return res.status(422).json({ message: 'Esse pet é seu!' });
+
+            if (petAtual.adopter) {
+                if (petAtual.adopter._id == user.id) {
+                    return res.status(422).json({ message: 'Você já agendou uma visita para este pet!' });
+                };
+            };
+
+            petAtual.adopter = {
+                _id: user.id,
+                name: user.name,
+                phone: user.phone,
+                image: user.images
+            };
+
+            await Pet.findByIdAndUpdate(idPet, petAtual);
+
+            res.status(201).json({ message: 'Agendamento de visita bem sucedido!' });
+        } catch (err) {
+            res.status(422).json({ message: 'Agendamento de visita mal sucedido!' });
+            console.log(err);
+        };
+    };
+
+    static async concludeAdoption(req, res) {
+        try {
+            const idPet = req.params.id;
+            const token = getToken(req);
+            const user = await getUserbyToken(token);
+
+            const petAtual = await Pet.findById(idPet);
+
+            if (!petAtual) return res.status(404).json({ message: 'Pet não encontrado!' });
+
+            if (petAtual.user._id.toString() !== user.id.toString()) return res.status(422).json({ message: 'Usuário não é o dono do pet!' });
+
+            petAtual.avaiable = false;
+
+            await Pet.findByIdAndUpdate(idPet, petAtual);
+            res.status(200).json({ message: 'Parabéns, o processo de adoção foi concluído!' });
+        }catch(err){
+            res.status(200).json({ message: 'Erro no processo de adoção!' });
+        };
+    };
 };

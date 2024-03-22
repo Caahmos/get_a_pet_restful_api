@@ -52,24 +52,26 @@ module.exports = class UserController {
     }
 
     static async checkUser(req, res) {
-        let currentUser;
+        try {
+            let currentUser;
 
-        console.log(req.headers.authorization)
+            if (req.headers.authorization) {
 
-        if (req.headers.authorization) {
+                const token = getToken(req);
+                const decoded = jwt.verify(token, 'nossosecret');
 
-            const token = getToken(req);
-            const decoded = jwt.verify(token, 'nossosecret');
+                currentUser = await User.findById(decoded.id);
 
-            currentUser = await User.findById(decoded.id);
+                currentUser.password = undefined;
 
-            currentUser.password = undefined;
+            } else {
+                currentUser = null;
+            }
 
-        } else {
-            currentUser = null;
+            res.status(200).send(currentUser);
+        } catch (err) {
+            res.status(422).json({ message: 'Usuário não autenticado!' })
         }
-
-        res.status(200).send(currentUser);
 
     }
 
@@ -92,7 +94,7 @@ module.exports = class UserController {
 
             let image = '';
 
-            if(req.file){
+            if (req.file) {
                 image = req.file.filename;
             };
 
@@ -116,14 +118,16 @@ module.exports = class UserController {
 
             user.phone = phone;
 
-            if (password != confirmPassword) return res.status(422).json({ message: 'As senhas devem ser iguais!' });
-            else if (password == confirmPassword && password != '') {
+            if (password && confirmPassword) {
+                if (password != confirmPassword) return res.status(422).json({ message: 'As senhas devem ser iguais!' });
+                else if (password == confirmPassword && password != '') {
 
-                const salt = bcrypt.genSaltSync(10);
-                const senhaHash = bcrypt.hashSync(password, salt);
+                    const salt = bcrypt.genSaltSync(10);
+                    const senhaHash = bcrypt.hashSync(password, salt);
 
-                user.password = senhaHash;
+                    user.password = senhaHash;
 
+                }
             }
 
             console.log('---------------------------------- ' + user._id);
@@ -132,7 +136,7 @@ module.exports = class UserController {
 
             return res.status(200).json({ message: 'Deu certo a edição!' });
         } catch (err) {
-            return res.status(401).json({ message: 'Usuário não encontrado!' });
+            return res.status(401).json({ message: 'O usuário não foi atualizado!' });
         }
     }
 };

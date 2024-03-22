@@ -92,13 +92,9 @@ module.exports = class UserController {
             const token = getToken(req);
             const user = await getUserbyToken(token);
 
-            let image = '';
-
             if (req.file) {
-                image = req.file.filename;
+                user.img = req.file.filename;
             };
-
-            user.img = image;
 
             if (!user) return res.status(401).json({ message: 'Usuário não encontrado!' });
 

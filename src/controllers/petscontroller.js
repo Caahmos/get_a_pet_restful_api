@@ -147,12 +147,14 @@ module.exports = class PetController {
             updateData.weight = weight;
             if (!color) return res.status(422).json({ message: 'A cor é obrigatória!' });
             updateData.color = color;
-            if (images.length === 0) return res.status(422).json({ message: 'A imagem é obrigatória!' });
-            updateData.images = images;
 
-            images.map(image => {
-                updateData.images.push(image.filename);
-            });
+            if (images.length > 0) {
+                updateData.images = [];
+
+                images.map(image => {
+                    updateData.images.push(image.filename);
+                });
+            }
 
             const petUpdate = await Pet.findByIdAndUpdate(id, updateData);
 
@@ -213,7 +215,7 @@ module.exports = class PetController {
 
             await Pet.findByIdAndUpdate(idPet, petAtual);
             res.status(200).json({ message: 'Parabéns, o processo de adoção foi concluído!' });
-        }catch(err){
+        } catch (err) {
             res.status(200).json({ message: 'Erro no processo de adoção!' });
         };
     };

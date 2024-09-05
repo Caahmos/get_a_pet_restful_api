@@ -1,0 +1,203 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Get a Pet Restful API",
+    "description": "Api para gestão do app de adoção de pets.",
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Servidor principal para desenvolvimento."
+    }
+  ],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "summary": "Create a new user.",
+        "description": "Register a new user on app",
+        "tags": ["Users"],
+        "requestBody": {
+          "description": "Fields to create an user",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#components/schemas/RegisterUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/RegisterUserResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro ao registrar o usuário!"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Login an user",
+        "description": "Login an user on app",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#components/schemas/LoginUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logged user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/LoginUserResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro ao tentar acessar o app"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemas": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "RegisterUserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Cauã"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Morales"
+          },
+          "birthdate": {
+            "type": "string",
+            "example": "01/01/01"
+          },
+          "email": {
+            "type": "string",
+            "example": "caua@gmail.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "(19) 99999-9999"
+          },
+          "password": {
+            "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          }
+        }
+      },
+      "RegisterUserResponse": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Usuário cadastrado com sucesso!"
+          },
+          "registeredUser": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Cauã"
+              },
+              "lastName": {
+                "type": "string",
+                "example": "Morales"
+              },
+              "email": {
+                "type": "string",
+                "example": "caua@gmail.com"
+              },
+              "token": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "LoginUserRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "caua@gmail.com"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginUserResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "caua@gmail.com"
+          },
+          "password": {
+            "type": "string"
+          },
+          "loggedUser": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Cauã"
+              },
+              "lastName": {
+                "type": "string",
+                "example": "Morales"
+              },
+              "email": {
+                "type": "string",
+                "example": "caua@gmail.com"
+              },
+              "phone": {
+                "type": "string",
+                "example": "(19) 99999-9999"
+              },
+              "token": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

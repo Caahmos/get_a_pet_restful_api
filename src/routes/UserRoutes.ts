@@ -1,6 +1,7 @@
 import { Router } from "express";
 import RegisterUserController from "../controllers/User/RegisterUserController";
 import LoginUserController from "../controllers/User/LoginUserController";
+import DetailUserController from "../controllers/User/DetailUserController";
 
 class UserRoutes{
     public router = Router();
@@ -18,6 +19,7 @@ class UserRoutes{
     }
 
     getRoutes(){
+        this.router.get('/:userId', DetailUserController.handle)
     }
 
     patchRoutes(){

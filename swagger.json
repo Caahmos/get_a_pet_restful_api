@@ -75,6 +75,40 @@
           }
         }
       }
+    },
+    "/users/{userId}": {
+      "get": {
+        "summary": "User details.",
+        "description": "Search an user by id",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "ID do usuário a ser exibido",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/DetailResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -165,12 +199,13 @@
       "LoginUserResponse": {
         "type": "object",
         "properties": {
-          "email": {
+          "type": {
             "type": "string",
-            "example": "caua@gmail.com"
+            "example": "success"
           },
-          "password": {
-            "type": "string"
+          "message": {
+            "type": "string",
+            "example": "Usuário entrou com sucesso!"
           },
           "loggedUser": {
             "type": "object",
@@ -193,6 +228,48 @@
               },
               "token": {
                 "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "DetailResponse": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Usuário encontrado com sucesso!"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 10
+              },
+              "name": {
+                "type": "string",
+                "example": "Cauã"
+              },
+              "lastName": {
+                "type": "string",
+                "example": "Morales"
+              },
+              "email": {
+                "type": "string",
+                "example": "caua@gmail.com"
+              },
+              "img": {
+                "type": "string",
+                "example": "null"
+              },
+              "phone": {
+                "type": "string",
+                "example": "(19) 99999-9999"
               }
             }
           }

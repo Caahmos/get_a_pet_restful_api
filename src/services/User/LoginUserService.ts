@@ -17,6 +17,7 @@ class LoginUserService{
         await Crypto.compare(loginUserData.password, userExists.password);
 
         const token = Token.create({
+            id: userExists.id,
             name: userExists.name,
             lastName: userExists.lastName,
             email: userExists.email,

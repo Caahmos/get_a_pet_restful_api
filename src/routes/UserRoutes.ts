@@ -2,6 +2,9 @@ import { Router } from "express";
 import RegisterUserController from "../controllers/User/RegisterUserController";
 import LoginUserController from "../controllers/User/LoginUserController";
 import DetailUserController from "../controllers/User/DetailUserController";
+import UpdateUserController from "../controllers/User/UpdateUserController";
+import { upload } from "../helpers/multer";
+import { isAuthenticated } from "../middlewares/isAuthenticated";
 
 class UserRoutes{
     public router = Router();
@@ -19,11 +22,11 @@ class UserRoutes{
     }
 
     getRoutes(){
-        this.router.get('/:userId', DetailUserController.handle)
+        this.router.get('/:userId', DetailUserController.handle);
     }
 
     patchRoutes(){
-
+        this.router.patch('/update', isAuthenticated, upload.single('img'), UpdateUserController.handle);
     }
 
     deleteRoutes(){

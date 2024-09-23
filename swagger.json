@@ -102,7 +102,40 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#components/schemas/DetailResponse"
+                  "$ref": "#components/schemas/DetailUserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/update": {
+      "patch": {
+        "summary": "User details.",
+        "description": "Update an user by token",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Fields to update an user",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#components/schemas/UpdateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/UpdateUserResponse"
                 }
               }
             }
@@ -112,7 +145,7 @@
     }
   },
   "components": {
-    "securitySchemas": {
+    "securitySchemes": {
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
@@ -233,7 +266,7 @@
           }
         }
       },
-      "DetailResponse": {
+      "DetailUserResponse": {
         "type": "object",
         "properties": {
           "type": {
@@ -273,6 +306,55 @@
               }
             }
           }
+        }
+      },
+      "UpdateUserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Cauã"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Morales"
+          },
+          "birthdate": {
+            "type": "string",
+            "example": "01/01/01"
+          },
+          "email": {
+            "type": "string",
+            "example": "caua@gmail.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "(19) 99999-9999"
+          },
+          "password": {
+            "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          },
+          "img": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "UpdateUserResponse": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Usuário atualizado com sucesso!"
+          },
+          "updatedUser": {}
         }
       }
     }

@@ -26,6 +26,7 @@ class RegisterUserService{
             const registeredUser = await prisma.user.create({
                 data: registerUserData,
                 select: {
+                    id: true,
                     email: true,
                     name: true,
                     lastName: true,

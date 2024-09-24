@@ -3,7 +3,6 @@ import prisma from "../../prisma/prisma";
 export default class DetailUserService {
     static async execute(userId: number) {
         
-
         const user = await prisma.user.findFirst({
             where: {
                 id: userId

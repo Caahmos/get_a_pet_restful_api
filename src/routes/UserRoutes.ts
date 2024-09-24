@@ -3,6 +3,7 @@ import RegisterUserController from "../controllers/User/RegisterUserController";
 import LoginUserController from "../controllers/User/LoginUserController";
 import DetailUserController from "../controllers/User/DetailUserController";
 import UpdateUserController from "../controllers/User/UpdateUserController";
+import DeleteUserController from "../controllers/User/DeleteUserControllet";
 import { upload } from "../helpers/multer";
 import { isAuthenticated } from "../middlewares/isAuthenticated";
 
@@ -30,7 +31,7 @@ class UserRoutes{
     }
 
     deleteRoutes(){
-
+        this.router.delete('/delete', isAuthenticated, DeleteUserController.handle);
     }
 };
 

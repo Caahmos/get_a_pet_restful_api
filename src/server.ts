@@ -30,7 +30,7 @@ class Server {
   configBodyParser() {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(express.static(path.resolve("public", "imgs")));
+    this.app.use(express.static(path.resolve("public", "assets")));
   }
 
   documentation(){

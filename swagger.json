@@ -81,11 +81,6 @@
         "summary": "User details.",
         "description": "Search an user by id",
         "tags": ["Users"],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "parameters": [
           {
             "name": "userId",
@@ -136,6 +131,29 @@
               "application/json": {
                 "schema": {
                   "$ref": "#components/schemas/UpdateUserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/delete": {
+      "delete": {
+        "summary": "Delete user.",
+        "description": "Delete an user by token",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/DeleteUserResponse"
                 }
               }
             }
@@ -355,6 +373,19 @@
             "example": "Usuário atualizado com sucesso!"
           },
           "updatedUser": {}
+        }
+      },
+      "DeleteUserResponse": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Usuário deletado com sucesso!"
+          }
         }
       }
     }
